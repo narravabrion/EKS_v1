@@ -1,0 +1,8 @@
+# author: brian marwa
+# email: kidbrion7@gmail.com
+# run kubectl apply -f be_namespace.yaml 
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: be

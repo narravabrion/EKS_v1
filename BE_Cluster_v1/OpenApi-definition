@@ -1,0 +1,187 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "burymeahatchet-agw",
+    "description": "burymeahatchet REST API gateway",
+    "version": "v1"
+  },
+  "host": "a8090cd4a3df3422a91efab866ec0deb-086cd50d33c13adb.elb.eu-west-1.amazonaws.com",
+  "schemes": ["http"],
+  "basePath": "/api/v1",
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/blog/posts/": {
+      "get": {
+        "operationId": "blog_posts_list",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Blog"
+              }
+            }
+          }
+        },
+        "tags": ["blog"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer <token>"
+          }
+        ]
+      }
+    },
+    "/blog/posts/{episode_number}/episodes/": {
+      "get": {
+        "operationId": "blog_posts_episodes_read",
+        "description": "",
+        "parameters": [
+          {
+            "name": "episode_number",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer <token>"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Blog"
+            }
+          }
+        },
+        "tags": ["blog"]
+      }
+    },
+    "/users/token/": {
+      "post": {
+        "operationId": "users_token_create",
+        "description": "Takes a set of user credentials and returns an access and refresh JSON web token pair to prove the authentication of those credentials.",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TokenObtainPair"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/TokenObtainPair"
+            }
+          }
+        },
+        "tags": ["users"]
+      }
+    },
+    "/users/token/refresh/": {
+      "post": {
+        "operationId": "users_token_refresh_create",
+        "description": "Takes a refresh type JSON web token and returns an access type JSON web token if the refresh token is valid.",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TokenRefresh"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/TokenRefresh"
+            }
+          }
+        },
+        "tags": ["users"]
+      }
+    }
+  },
+  "definitions": {
+    "Blog": {
+      "required": ["content"],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string",
+          "format": "uuid"
+        },
+        "episode_number": {
+          "title": "Episode number",
+          "type": "integer"
+        },
+        "content": {
+          "title": "Content",
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "title": "Created at",
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "title": "Updated at",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "TokenObtainPair": {
+      "required": ["email", "password"],
+      "type": "object",
+      "properties": {
+        "email": {
+          "title": "Email",
+          "type": "string",
+          "minLength": 1
+        },
+        "password": {
+          "title": "Password",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "TokenRefresh": {
+      "required": ["refresh"],
+      "type": "object",
+      "properties": {
+        "refresh": {
+          "title": "Refresh",
+          "type": "string",
+          "minLength": 1
+        },
+        "access": {
+          "title": "Access",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}
